@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Happy Birthday sayangg</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&family=Dancing+Script:wght@700&family=Pinyon+Script&display=swap" rel="stylesheet" />
+    <style>
+      /* Reset & Base */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        height: 100vh;
+        width: 100vw;
+        background: linear-gradient(135deg, #fce4ec 0%, #f3e5f5 100%);
+        font-family: "Quicksand", sans-serif;
+        overflow: hidden;
+        /* PAKSA TENGAH */
+        display: grid;
+        place-items: center;
+        position: relative;
+      }
+
+      /* Overlay Awal */
+      #startOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: #fce4ec;
+        z-index: 5000;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        transition: 0.8s ease;
+      }
+      .envelope {
+        font-size: 5rem;
+        cursor: pointer;
+        animation: float 3s ease-in-out infinite;
+      }
+      @keyframes float {
+        0%,
+        100% {
+          transform: translateY(0);
+        }
+        50% {
+          transform: translateY(-20px);
+        }
+      }
+
+      /* Background Hati */
+      #hearts-bg {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .heart {
+        position: absolute;
+        color: rgba(255, 64, 129, 0.2);
+        font-size: 20px;
+        animation: fly 5s linear infinite;
+      }
+      @keyframes fly {
+        0% {
+          transform: translateY(100vh) rotate(0deg);
+          opacity: 1;
+        }
+        100% {
+          transform: translateY(-10vh) rotate(360deg);
+          opacity: 0;
+        }
+      }
+
+      /* Kontainer Utama */
+      .container {
+        z-index: 10;
+        width: 90%;
+        max-width: 400px;
+        display: none; /* Muncul setelah klik */
+        animation: slideUp 0.8s ease-out;
+      }
+      @keyframes slideUp {
+        from {
+          opacity: 0;
+          transform: translateY(50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .glass-card {
+        background: rgba(255, 255, 255, 0.85);
+        backdrop-filter: blur(10px);
+        border-radius: 25px;
+        padding: 30px 20px;
+        text-align: center;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.6);
+      }
+
+      /* Galeri Foto (Layout Baru agar tidak narik ke atas) */
+      .photo-wrapper {
+        display: flex;
+        justify-content: center;
+        height: 180px; /* Batasi tinggi galeri */
+        margin-bottom: 20px;
+        position: relative;
+      }
+      .polaroid {
+        background: white;
+        padding: 5px 5px 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        position: absolute;
+        transition: 0.5s ease;
+        border: 1px solid #eee;
+      }
+      .polaroid img {
+        width: 100px;
+        height: 100px;
+        object-fit: cover;
+      }
+      .polaroid::after {
+        content: "Fav ❤️";
+        position: absolute;
+        bottom: 3px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: "Pinyon Script";
+        font-size: 0.9rem;
+        color: #888;
+      }
+
+      /* Posisi Tumpukan */
+      .p1 {
+        transform: rotate(-10deg) translateX(-35px);
+        z-index: 3;
+      }
+      .p2 {
+        transform: rotate(8deg) translateX(35px);
+        z-index: 2;
+      }
+      .p3 {
+        transform: rotate(-3deg) translateY(-10px);
+        z-index: 1;
+      }
+
+      .photo-wrapper:hover .p1 {
+        transform: rotate(-15deg) translateX(-70px);
+      }
+      .photo-wrapper:hover .p2 {
+        transform: rotate(15deg) translateX(70px);
+      }
+      .photo-wrapper:hover .p3 {
+        transform: rotate(0deg) translateY(-40px);
+      }
+
+      /* Teks & Konten */
+      h1 {
+        font-family: "Dancing Script";
+        color: #d81b60;
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      #typing-text {
+        color: #555;
+        font-size: 0.9rem;
+        min-height: 45px;
+        margin-bottom: 15px;
+        line-height: 1.5;
+      }
+
+      /* Timer */
+      .timer {
+        display: flex;
+        justify-content: center;
+        gap: 6px;
+        margin-bottom: 20px;
+      }
+      .t-box {
+        background: #fff1f5;
+        padding: 4px 10px;
+        border-radius: 8px;
+        font-size: 0.7rem;
+        color: #d81b60;
+        font-weight: bold;
+        border: 1px solid #fce4ec;
+      }
+
+      /* Tombol */
+      .btn-group {
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+        min-height: 50px;
+        position: relative;
+      }
+      button {
+        padding: 10px 22px;
+        border-radius: 50px;
+        border: none;
+        font-weight: bold;
+        cursor: pointer;
+        font-family: "Quicksand";
+        transition: 0.3s;
+        font-size: 0.9rem;
+      }
+      #yesBtn {
+        background: #ff4081;
+        color: white;
+        box-shadow: 0 5px 15px rgba(255, 64, 129, 0.3);
+      }
+      #noBtn {
+        background: #f8f9fa;
+        color: #888;
+        border: 1px solid #ddd;
+      }
+
+      .success {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: white;
+        z-index: 6000;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="startOverlay">
+      <div class="envelope" onclick="mulaiWeb()">✉️</div>
+      <p style="margin-top: 15px; color: #d81b60; font-weight: bold">di Klik ya sayangg..</p>
+    </div>
+
+    <div id="hearts-bg"></div>
+
+    <div class="container" id="mainContent">
+      <div class="glass-card">
+        <div class="photo-wrapper">
+          <div class="polaroid p1"><img src="iin1.jpeg" /></div>
+          <div class="polaroid p2"><img src="iin2.jpeg" /></div>
+          <div class="polaroid p3"><img src="iin3.jpeg" /></div>
+        </div>
+
+        <h1>Happy Birthday Sayangg..</h1>
+        <p id="typing-text"></p>
+
+        <div class="timer">
+          <div class="t-box"><span id="d">0</span> Hari</div>
+          <div class="t-box"><span id="h">0</span> Jam</div>
+          <div class="t-box"><span id="m">0</span> Menit</div>
+        </div>
+
+        <div class="btn-group">
+          <button id="yesBtn">MAUUUU</button>
+          <button id="noBtn">Nggak Mau</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="success" id="successMsg">
+      <h1 style="font-size: 2.5rem; color: #d81b60">YAYYY! 😍</h1>
+      <p>I'm so happy! Sampai ketemu nantii ya sayangg❤️</p>
+    </div>
+
+    <audio id="lagu" loop>
+      <source src="https://www.bensound.com/bensound-music/bensound-love.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+      const targetDate = new Date("March 27, 2026 19:00:00").getTime();
+      const pesan = "Cinta diciptakan oleh Adam dan Hawa disebarkan oleh Rama dan Shinta dan dibawa mati oleh Romeo dan Juliet dan dibangkitkan lagi oleh Inun dan Agil, Happy birthday ya sayangku❤️, mau ga nanti kita jalann??   ";
+
+      function mulaiWeb() {
+        document.getElementById("startOverlay").style.opacity = "0";
+        setTimeout(() => {
+          document.getElementById("startOverlay").style.display = "none";
+          document.getElementById("mainContent").style.display = "block";
+          document
+            .getElementById("lagu")
+            .play()
+            .catch((e) => console.log("Musik butuh interaksi"));
+          typeWriter();
+        }, 800);
+      }
+
+      let i = 0;
+      function typeWriter() {
+        if (i < pesan.length) {
+          document.getElementById("typing-text").innerHTML += pesan.charAt(i);
+          i++;
+          setTimeout(typeWriter, 50);
+        }
+      }
+
+      setInterval(() => {
+        const now = new Date().getTime();
+        const diff = targetDate - now;
+        if (diff > 0) {
+          document.getElementById("d").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+          document.getElementById("h").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+          document.getElementById("m").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+        }
+      }, 1000);
+
+      const noBtn = document.getElementById("noBtn");
+      const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
+
+      function lari() {
+        noBtn.style.position = "fixed";
+        const padding = 50;
+        const x = clamp(Math.random() * (window.innerWidth - noBtn.offsetWidth), padding, window.innerWidth - noBtn.offsetWidth - padding);
+        const y = clamp(Math.random() * (window.innerHeight - noBtn.offsetHeight), padding, window.innerHeight - noBtn.offsetHeight - padding);
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+      }
+      noBtn.addEventListener("mouseover", lari);
+      noBtn.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        lari();
+      });
+
+      document.getElementById("yesBtn").addEventListener("click", () => {
+        document.getElementById("successMsg").style.display = "flex";
+      });
+
+      setInterval(() => {
+        const h = document.createElement("div");
+        h.classList.add("heart");
+        h.innerHTML = "❤️";
+        h.style.left = Math.random() * 100 + "vw";
+        h.style.animationDuration = Math.random() * 2 + 3 + "s";
+        document.getElementById("hearts-bg").appendChild(h);
+        setTimeout(() => h.remove(), 5000);
+      }, 500);
+    </script>
+  </body>
+</html>
